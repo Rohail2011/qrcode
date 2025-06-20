@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <body style="background-image: url('images.jpeg'); background-size: cover; "></body>
+
+   <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            margin: 50px;
+        }
+
+        #container {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .b{
+            background-color: #4caf50;
+            
+        }
+
+        #qr-code {
+            margin-top: 20px;
+        }
+
+        #copy-btn, #download-btn {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        #download-btn {
+            margin-left: 10px;
+        }
+
+        #copy-btn:hover, #download-btn:hover {
+            background-color: #45a049;
+        }
+
+        #copy-btn:active, #download-btn:active {
+            background-color: #3e8e41;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h2>QR Code Generator</h2>
+        <h4>by Chaudhry</h4>
+        <input type="text" id="input-text" placeholder="Enter text or URL">
+        <button class="b" id="generate-btn" onclick="generateQRCode()">Generate QR Code</button>
+        <div id="qr-code"></div>
+        <button id="copy-btn" onclick="copyQRCode()">Copy QR Code</button>
+        <button id="download-btn" onclick="downloadQRCode()">Download QR Code</button>
+    </div>
+
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
+    <script>
+        function generateQRCode() {
+            var inputText = document.getElementById('input-text').value;
+            var container = document.getElementById('qr-code');
+
+            // Clear previous QR code
+            container.innerHTML = '';
+
+            // Generate QR code
+            var qrcode = new QRCode(container, {
+                text: inputText,
+                width: 200,
+                height: 200
+            });
+        }
+
+        function copyQRCode() {
+            var copyText = document.getElementById('qr-code').getElementsByTagName('img')[0].src;
+
+            var tempInput = document.createElement('input');
+            document.body.appendChild(tempInput);
+            tempInput.value = copyText;
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+
+            alert('Copied to clipboard!');
+        }
+
+        function downloadQRCode() {
+            var container = document.getElementById('qr-code');
+
+            html2canvas(container).then(function(canvas) {
+                var link = document.createElement('a');
+                link.href = canvas.toDataURL('image/png');
+                link.download = 'qrcode.png';
+                link.click();
+            });
+        }
+    </script>
+</body>
+</html>
